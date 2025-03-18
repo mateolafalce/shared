@@ -1,74 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>shared</title>
-  <style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-  </style>
-</head>
-<body>
-  <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" />
-
-  <script>
-    const host = window.location.host;
-    const boton = document.getElementById('compartir');
-    const video = document.getElementById('video');
-    const receivedImage = document.getElementById('received-image');
-    let ws;
-    let isSharing = false;
-
-    ws = new WebSocket('ws://' +host+ '/ws');
-
-
-    ws.onmessage = (event) => {
-      if (!isSharing) {
-        const blob = new Blob([event.data], { type: 'image/jpeg' });
-        const url = URL.createObjectURL(blob);
-        receivedImage.src = url;
-      }
-    };
-
-    boton.addEventListener('click', async () => {
-      try {
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-          video: { cursor: "always" },
-          audio: false
-        });
-
-        video.srcObject = stream;
-        isSharing = true;
-
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        const sendFrame = () => {
-          if (video.videoWidth === 0 || video.videoHeight === 0) {
-            return;
-          }
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-          canvas.toBlob((blob) => {
-            if (ws.readyState === WebSocket.OPEN) {
-              blob.arrayBuffer().then((buffer) => {
-                ws.send(buffer);
-              });
-            }
-          }, 'image/jpeg', 1); 
-        };
-
-        setInterval(sendFrame, 5); 
-
-      } catch (err) {
-        console.error("Error:", err);
-      }
-    });
-  </script>
-</body>
+   <head>
+      <title>shared</title>
+      <style>
+         body, html {
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+         }
+      </style>
+   </head>
+   <body>
+      <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" />
+      <script>
+         const host = window.location.host;
+         const video = document.getElementById('video');
+         const receivedImage = document.getElementById('received-image');
+         let ws;
+         let isSharing = false;
+         
+         ws = new WebSocket('ws://' +host+ '/ws');
+         
+         
+         ws.onmessage = (event) => {
+           if (!isSharing) {
+             const blob = new Blob([event.data], { type: 'image/jpeg' });
+             const url = URL.createObjectURL(blob);
+             receivedImage.src = url;
+           }
+         };
+         
+         boton.addEventListener('click', async () => {
+           try {
+             const stream = await navigator.mediaDevices.getDisplayMedia({
+               video: { cursor: "always" },
+               audio: false
+             });
+         
+             video.srcObject = stream;
+             isSharing = true;
+         
+             const canvas = document.createElement('canvas');
+             const context = canvas.getContext('2d');
+         
+             const sendFrame = () => {
+               if (video.videoWidth === 0 || video.videoHeight === 0) {
+                 return;
+               }
+               canvas.width = video.videoWidth;
+               canvas.height = video.videoHeight;
+         
+               context.drawImage(video, 0, 0, canvas.width, canvas.height);
+         
+               canvas.toBlob((blob) => {
+                 if (ws.readyState === WebSocket.OPEN) {
+                   blob.arrayBuffer().then((buffer) => {
+                     ws.send(buffer);
+                   });
+                 }
+               }, 'image/jpeg', 1); 
+             };
+         
+             setInterval(sendFrame, 5); 
+         
+           } catch (err) {
+             console.error("Error:", err);
+           }
+         });
+      </script>
+   </body>
 </html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>shared</title>
+  <style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .content {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <video id="video" autoplay style="width: 50%; border: 1px solid black;"></video>
+    <br>
+    <button id="share">Share the screen</button>
+  </div>
+  <script>
+    const host = window.location.host;
+    const boton = document.getElementById('share');
+    const video = document.getElementById('video');
+    const socket = new WebSocket('ws://' +host+ '/ws'); 
+
+    boton.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { cursor: "always" },
+          audio: false
+        });
+
+        video.srcObject = stream;
+
+        const track = stream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(track);
+        
+        setInterval(async () => {
+          try {
+            const bitmap = await imageCapture.grabFrame();
+            const canvas = document.createElement('canvas');
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bitmap, 0, 0);
+            canvas.toBlob((blob) => {
+              socket.send(blob); 
+            }, 'image/png');
+          } catch (err) {
+            console.error('Error:', err);
+          }
+        }, 5); // every 5ms
+
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    });
+  </script>
+</body>
+</html>

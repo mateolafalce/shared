@@ -17,18 +17,50 @@ The program is designed so that **one screen** is shared with **multiple client 
    * [x] Windows
    * [x] Mac
 
-## Install
+The program allows different administrators to share their screens within the same network using an algorithm that checks whether the current port (3000) is in use or not. If it is in use, it checks port 3001; if that is also in use, it checks port 3002, and so on.
 
-You can build it from scratch or install by cargo.
+## Run
+
+You can run shared from scratch.
 
 ```bash
 git clone https://github.com/mateolafalce/shared.git
 ```
 
 ```bash
-cargo install --path .
+cargo run
+```
+
+or 
+
+```bash
+cargo install path . 
 ```
 
 ```bash
 shared
 ```
+
+## Help
+
+```bash
+cargo run -- --help
+```
+
+or
+
+```bash
+shared --help
+```
+
+```bash
+Options:
+  -p, --port <PORT>    The port you want the program to run on, by default 3000
+  -t, --title <TITLE>  The title of the page, by default "shared"
+  -h, --help           Print help
+  -V, --version        Print version
+```
+
+## Demo
+
+![Demo](static/how_works.gif)

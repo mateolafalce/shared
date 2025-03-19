@@ -63,8 +63,6 @@ Options:
 
 ## Demo
 
-![Demo](static/how_works.gif)
-
-<p align="center">
-  <img src="https://github.com/mateolafalce/shared/blob/main/static/how_works.gif" alt="Demo GIF" width="500" style="border-radius:10px;">
-</p>
+<video width="320" height="240" controls>
+  <source src="static/how_works.mov" type="video/mp4">
+</video>

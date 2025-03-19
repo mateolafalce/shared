@@ -53,6 +53,8 @@ or
 shared --help
 ```
 
+Output:
+
 ```bash
 Options:
   -p, --port <PORT>    The port you want the program to run on, by default 3000

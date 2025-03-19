@@ -81,7 +81,8 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("In localhost http://127.0.0.1:{port}");
+    println!("Users in localhost http://127.0.0.1:{port}");
+    println!("Admin in localhost http://127.0.0.1:{port}/admin");
     // TODO get local network ip in Win and Mac
     if cfg!(target_os = "linux") {
         let output = Command::new("sh")
@@ -92,7 +93,7 @@ async fn main() {
 
         if output.status.success() {
             let ip = String::from_utf8_lossy(&output.stdout);
-            println!("For local network http://{}:{port}", ip.trim());
+            println!("Users in local network http://{}:{port}", ip.trim());
         } else {
             eprintln!(
                 "Command failed: {}",

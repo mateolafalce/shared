@@ -63,4 +63,4 @@ Options:
 
 ## Demo
 
-https://github.com/mateolafalce/shared/blob/main/static/how_works.mp4
+[Watch the video](https://github.com/mateolafalce/shared/blob/main/static/how_works.mp4)

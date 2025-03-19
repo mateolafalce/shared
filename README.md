@@ -12,3 +12,8 @@ The program is designed so that **one screen** is shared with **multiple client 
 * Features
    * [x] Share the screen
    * [ ] Optionally audio share
+* OS Support (as a server)
+   * [x] Linux
+   * [ ] Windows
+   * [ ] Mac
+

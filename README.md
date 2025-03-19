@@ -63,6 +63,4 @@ Options:
 
 ## Demo
 
-<video width="320" height="240" controls>
-  <source src="static/how_works.mov" type="video/mp4">
-</video>
+https://github.com/mateolafalce/shared/blob/main/static/how_works.mp4

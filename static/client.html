@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>shared</title>
       <style>
          body, html {
          margin: 0;
@@ -9,64 +8,57 @@
          overflow: hidden;
          }
       </style>
+      <link rel="icon" href="static/icon.ico">
    </head>
    <body>
-      <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" />
+      <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" src="static/waiting.png" />
       <script>
          const host = window.location.host;
-         const video = document.getElementById('video');
          const receivedImage = document.getElementById('received-image');
          let ws;
          let isSharing = false;
-         
-         ws = new WebSocket('ws://' +host+ '/ws');
-         
-         
+         let lastDataTime = Date.now();
+         const waitingImage = 'static/waiting.png';
+         const timeoutDuration = 5000; // 5 secs
+
+         ws = new WebSocket('ws://' + host + '/ws');
+
          ws.onmessage = (event) => {
-           if (!isSharing) {
+           if (typeof event.data === 'string') {
+             try {
+               const data = JSON.parse(event.data);
+               if (data.type === 'user_count') {
+                 const userCountElement = document.getElementById('user-count');
+                 if (userCountElement) {
+                   userCountElement.textContent = data.count;
+                 }
+               }
+             } catch (e) {
+               console.error('Invalid message:', event.data);
+             }
+           } else {
              const blob = new Blob([event.data], { type: 'image/jpeg' });
              const url = URL.createObjectURL(blob);
              receivedImage.src = url;
+             lastDataTime = Date.now();
            }
          };
-         
-         boton.addEventListener('click', async () => {
-           try {
-             const stream = await navigator.mediaDevices.getDisplayMedia({
-               video: { cursor: "always" },
-               audio: false
-             });
-         
-             video.srcObject = stream;
-             isSharing = true;
-         
-             const canvas = document.createElement('canvas');
-             const context = canvas.getContext('2d');
-         
-             const sendFrame = () => {
-               if (video.videoWidth === 0 || video.videoHeight === 0) {
-                 return;
-               }
-               canvas.width = video.videoWidth;
-               canvas.height = video.videoHeight;
-         
-               context.drawImage(video, 0, 0, canvas.width, canvas.height);
-         
-               canvas.toBlob((blob) => {
-                 if (ws.readyState === WebSocket.OPEN) {
-                   blob.arrayBuffer().then((buffer) => {
-                     ws.send(buffer);
-                   });
-                 }
-               }, 'image/jpeg', 1); 
-             };
-         
-             setInterval(sendFrame, 5); 
-         
-           } catch (err) {
-             console.error("Error:", err);
+
+         setInterval(() => {
+           if (Date.now() - lastDataTime > timeoutDuration) {
+             receivedImage.src = waitingImage;
            }
-         });
+         }, 1000); 
+
+         ws.onerror = (error) => {
+           console.error('WebSocket error:', error);
+           receivedImage.src = waitingImage; 
+         };
+
+         ws.onclose = () => {
+           console.log('WebSocket connection closed');
+           receivedImage.src = waitingImage; 
+         };
       </script>
    </body>
 </html>

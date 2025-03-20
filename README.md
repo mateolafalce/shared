@@ -23,7 +23,7 @@ The program allows different administrators to share their screens within the sa
 
 ## Execute
 
-You can execute the latest shader version for x86_64 on Linux devices [here](https://github.com/mateolafalce/shared/releases).
+You can run the latest shader version for x86_64 on Linux devices [here](https://github.com/mateolafalce/shared/releases).
 
 
 ## Compile and Run
@@ -38,26 +38,10 @@ git clone https://github.com/mateolafalce/shared.git
 cargo run
 ```
 
-or 
-
-```bash
-cargo install path . 
-```
-
-```bash
-shared
-```
-
 ## Help
 
 ```bash
 cargo run -- --help
-```
-
-or
-
-```bash
-shared --help
 ```
 
 Output:
@@ -68,6 +52,12 @@ Options:
   -t, --title <TITLE>  The title of the page, by default "shared"
   -h, --help           Print help
   -V, --version        Print version
+```
+
+## Custom CLI args
+
+```bash
+./shared.AppImage --title "Class: digital signatures" --port 1234
 ```
 
 ## Demo

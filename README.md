@@ -7,6 +7,7 @@ The program is designed so that **one screen** is shared with **multiple client 
 - At `/admin`, the user can share their screen with others.
 - At `/`, users can view the screen being shared.
 
+
 ## Roadmap
 
 * Features
@@ -19,7 +20,13 @@ The program is designed so that **one screen** is shared with **multiple client 
 
 The program allows different administrators to share their screens within the same network using an algorithm that checks whether the current port (3000) is in use or not. If it is in use, it checks port 3001; if that is also in use, it checks port 3002, and so on.
 
-## Run
+
+## Execute
+
+You can execute the latest shader version for x86_64 on Linux devices [here](https://github.com/mateolafalce/shared/releases).
+
+
+## Compile and Run
 
 You can run shared from scratch.
 

@@ -8,7 +8,6 @@ use clap::Parser;
 use futures_util::{SinkExt, StreamExt};
 use std::{
     env::consts::OS,
-    fs,
     net::SocketAddr,
     process::{Command, exit},
     sync::{
@@ -18,6 +17,10 @@ use std::{
 };
 use tokio::sync::{Mutex, broadcast};
 
+/// Admin html
+const ADMIN: &str = include_str!("../static/index.html");
+/// Client html
+const CLIENT: &str = include_str!("../static/client.html");
 /// Default port
 const PORT: u16 = 3000;
 /// Default title
@@ -134,12 +137,11 @@ async fn main() {
 }
 
 macro_rules! serve_html {
-    ($func_name:ident, $file_path:expr) => {
+    ($func_name:ident, $const_name:expr) => {
         async fn $func_name(
             axum::extract::State(state): axum::extract::State<AppState>,
         ) -> Html<String> {
-            let mut html =
-                fs::read_to_string($file_path).unwrap_or_else(|_| "<h1>Error</h1>".to_string());
+            let mut html = String::from($const_name);
             html.push_str(&format!("<title>{}</title>", state.title));
             let urls = get_urls(state.port);
             html.push_str(&urls.0);
@@ -150,8 +152,8 @@ macro_rules! serve_html {
     };
 }
 
-serve_html!(serve_index, "static/index.html");
-serve_html!(client_index, "static/client.html");
+serve_html!(serve_index, ADMIN);
+serve_html!(client_index, CLIENT);
 
 async fn ws_handler(
     ws: WebSocketUpgrade,

@@ -1,6 +1,6 @@
 [package]
 name = "shared"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2024"
 authors = ["Mateo Lafalce <mateolafalce@protonmail.com>"]
 license = "GPL-3.0"

@@ -1,7 +1,8 @@
 use axum::{
     Router,
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
-    response::{Html, IntoResponse},
+    http::{StatusCode, header},
+    response::{Html, IntoResponse, Response},
     routing::get,
 };
 use clap::Parser;
@@ -21,6 +22,10 @@ use tokio::sync::{Mutex, broadcast};
 const ADMIN: &str = include_str!("../static/index.html");
 /// Client html
 const CLIENT: &str = include_str!("../static/client.html");
+/// Icon
+const FAVICON: &[u8] = include_bytes!("../static/icon.ico");
+/// Waiting image
+const WAITING: &[u8] = include_bytes!("../static/waiting.png");
 /// Default port
 const PORT: u16 = 3000;
 /// Default title
@@ -119,10 +124,8 @@ async fn main() {
         .route("/admin", get(serve_index))
         .route("/", get(client_index))
         .route("/ws", get(ws_handler))
-        .nest_service(
-            "/static",
-            axum::routing::get_service(tower_http::services::ServeDir::new("./static")),
-        )
+        .route("/icon.ico", get(get_favicon))
+        .route("/waiting.png", get(get_waiting))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}"))
@@ -230,4 +233,22 @@ fn get_urls(port: u16) -> (String, String, String) {
         }
     }
     (local, admin, network)
+}
+
+async fn get_favicon() -> Response {
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, "image/x-icon")],
+        FAVICON,
+    )
+        .into_response()
+}
+
+async fn get_waiting() -> Response {
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, "image/x-icon")],
+        WAITING,
+    )
+        .into_response()
 }

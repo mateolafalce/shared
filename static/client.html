@@ -8,17 +8,17 @@
          overflow: hidden;
          }
       </style>
-      <link rel="icon" href="static/icon.ico">
+      <link rel="icon" href="/icon.ico">
    </head>
    <body>
-      <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" src="static/waiting.png" />
+      <img id="received-image" style="width: 100vw; height: 100vh; object-fit: contain; border: 1px solid black;" src="/waiting.png" />
       <script>
          const host = window.location.host;
          const receivedImage = document.getElementById('received-image');
          let ws;
          let isSharing = false;
          let lastDataTime = Date.now();
-         const waitingImage = 'static/waiting.png';
+         const waitingImage = '/waiting.png';
          const timeoutDuration = 5000; // 5 secs
 
          ws = new WebSocket('ws://' + host + '/ws');

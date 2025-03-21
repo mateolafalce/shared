@@ -46,17 +46,7 @@ git clone https://github.com/mateolafalce/shared.git
 cargo run --release
 ```
 
-## Install
-
-```bash
-cargo install shared
-```
-
 ## Help
-
-```bash
-shared --help
-```
 
 ```bash
 ./shared.AppImage --help
@@ -80,10 +70,6 @@ Options:
 
 ```bash
 ./shared.AppImage --title "Class: digital signatures" --port 1234
-```
-
-```bash
-shared --title "Class: digital signatures" --port 1234
 ```
 
 ```bash

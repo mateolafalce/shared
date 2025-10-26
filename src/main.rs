@@ -8,9 +8,8 @@ use axum::{
 use clap::Parser;
 use futures_util::{SinkExt, StreamExt};
 use std::{
-    env::consts::OS,
     net::SocketAddr,
-    process::{Command, exit},
+    process::Command,
     sync::{
         Arc,
         atomic::{AtomicBool, Ordering},
@@ -68,7 +67,7 @@ struct Args {
 async fn main() {
     let args = Args::parse();
 
-    let mut port: u16 = match args.port {
+    let port: u16 = match args.port {
         Some(port) => port,
         None => PORT,
     };

@@ -45,6 +45,16 @@ git clone https://github.com/mateolafalce/shared.git
 cargo run --release
 ```
 
+## Run with Docker
+
+You can also run the application using Docker. This is the recommended way to ensure a consistent environment.
+
+```bash
+docker compose up
+```
+
+The application will be available on your local network. The console output will show you the correct URLs to access the admin and client pages.
+
 ## Help
 
 ```bash

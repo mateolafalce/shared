@@ -78,46 +78,6 @@ async fn main() {
         None => TITLE.to_string(),
     };
 
-    let open_a_window_in_your_browser = match OS {
-        "linux" | "macos" => "xdg-open",
-        "windows" => "start",
-        _ => {
-            eprintln!("OS incompatible");
-            exit(1);
-        }
-    };
-
-    {
-        let listener = loop {
-            match std::net::TcpListener::bind(("127.0.0.1", port)) {
-                Ok(listener) => break listener,
-                Err(_) => {
-                    port += 1;
-                    if port == 65535 {
-                        eprintln!("All port are in use :(");
-                        exit(1);
-                    }
-                }
-            }
-        };
-
-        Command::new(open_a_window_in_your_browser)
-            .arg(format!("http://127.0.0.1:{port}/admin"))
-            .output()
-            .unwrap();
-        // if all is OK, run the localhost, when it is received then end the process
-        for stream in listener.incoming() {
-            match stream {
-                Ok(_stream) => {
-                    break; // stop accepting, and `listener_` will be dropped
-                }
-                Err(e) => {
-                    eprintln!("Error: {}", e);
-                }
-            }
-        }
-    }
-
     let state = AppState::new(title, port);
 
     let app = Router::new()
